@@ -55,14 +55,14 @@ def main():
 
     log_feature = {'total_tests_per_thousand': 180}
 
-    log_df = pd.Series([log_feature])
+    log_series = pd.Series(log_feature)
 
     differencing_data = pd.DataFrame([differenced_features])
 
     preprocessed_data = preprocess_differencing(input_df, differencing_data)
 
     for feature in log_feature.keys():
-        preprocessed_data[feature] = preprocess_log(preprocessed_data[feature], log_df[feature])
+        preprocessed_data[feature] = preprocess_log(preprocessed_data[feature], log_series[feature])
 
     # Load the model
     model_path = 'model/xgb_model_total_deaths.pkl'
