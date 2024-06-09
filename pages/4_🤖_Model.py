@@ -1,9 +1,10 @@
 import pandas as pd
-import numpy as np
-import pickle
+# import numpy as np
+# import pickle
 import streamlit as st
-import xgboost as xgb
+# import xgboost as xgb
 import joblib
+import os
 
 # Load the model
 # @st.cache_resource
@@ -79,8 +80,17 @@ def main():
     preprocessed_data = preprocess(input_df, differencing_data)
 
     # Load the model
-    model_path = '../model/xgb_model_total_imputed_cases.pkl'
-    model = joblib.load(model_path)
+    model_path = 'model/xgb_model_total_imputed_cases.pkl'
+
+    if not os.path.exists(model_path):
+        st.error(f" Model file not found at {model_path}. Please check the path and try again.")
+        return
+    
+    try:
+        model = joblib.load(model_path)
+    except Exception as e:
+        st.error(f"An error occured while loading the model: {e}")
+        return
 
     # Make prediction
     if st.button("Predict"):
