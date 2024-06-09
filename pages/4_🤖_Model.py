@@ -14,12 +14,6 @@ import os
 #     return model
 
 # Define preprocessing function
-# def preprocess(data, differenced_features):
-#     for feature in differenced_features:
-#         data[feature] = data[feature].diff().fillna(0)
-#     return data
-
-# Define preprocessing function
 def preprocess(main_dataframe, dataframe_with_last_known_value):
     """
     Preprocess the main dataframe by subtracting values from the dataframe_with_last_known_value.
@@ -37,11 +31,12 @@ def preprocess(main_dataframe, dataframe_with_last_known_value):
     """
     # Identify the common columns
     common_columns = main_dataframe.columns.intersection(dataframe_with_last_known_value.columns)
-    # Copy the main dataframe to avoid modifying the original dataframe
-    transformed_dataframe = main_dataframe.copy()
+
     # Subtract the values of the known features
-    transformed_dataframe[common_columns] = main_dataframe[common_columns] - dataframe_with_last_known_value[common_columns].values
-    return transformed_dataframe
+    for column in common_columns:
+        main_dataframe[column] = main_dataframe[column] - dataframe_with_last_known_value[column]
+        
+    return main_dataframe
 
 # Main function to display the Streamlit app
 def main():
