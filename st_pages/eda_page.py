@@ -6,7 +6,7 @@ import plotly.express as px
 warnings.filterwarnings('ignore')
 
 
-file_path = './preprocessed_data_updated.csv'
+file_path = './assets/data/preprocessed_data_updated.csv'
 
 @st.cache_data
 def load_data(file_path):

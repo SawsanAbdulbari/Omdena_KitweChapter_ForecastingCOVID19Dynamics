@@ -5,7 +5,7 @@ import pandas as pd
 import streamlit as st
 # import xgboost as xgb
 
-model_path = './model/xgb_model_total_imputed_cases.pkl'
+model_path = './assets/model/xgb_model_total_imputed_cases.pkl'
 
 # Load the model
 @st.cache_resource

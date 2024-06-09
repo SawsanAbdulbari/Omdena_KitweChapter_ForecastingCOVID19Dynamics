@@ -43,7 +43,7 @@ def plot3(df):
 overview = None
 
 def main(overview):
-    df = pd.read_csv("preprocessed_data_updated.csv")
+    df = pd.read_csv("assets/data/preprocessed_data_updated.csv")
     overview.write("<h3>📊 Overview Of COVID-19 Data</h3>", unsafe_allow_html=True)
 
     total_cases = df['imputed_total_cases'].sum()
