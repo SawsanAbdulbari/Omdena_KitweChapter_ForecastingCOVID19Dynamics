@@ -1,17 +1,18 @@
+import os
+import pickle
+import joblib
 import pandas as pd
-# import numpy as np
-# import pickle
 import streamlit as st
 # import xgboost as xgb
-import joblib
-import os
+
+model_path = './model/xgb_model_total_imputed_cases.pkl'
 
 # Load the model
-# @st.cache_resource
-# def load_model(path):
-#     with open(path, 'rb') as file:
-#         model = pickle.load(file)
-#     return model
+@st.cache_resource
+def load_model(path):
+    with open(path, 'rb') as file:
+        model = pickle.load(file)
+    return model
 
 # Define preprocessing function
 def preprocess(main_dataframe, dataframe_with_last_known_value):
@@ -39,17 +40,15 @@ def preprocess(main_dataframe, dataframe_with_last_known_value):
     return main_dataframe
 
 # Main function to display the Streamlit app
-def main():
-    st.title("COVID-19 Case Prediction :mask:")
-
-    st.markdown("""
+def main(mod):
+    mod.write("<h3>😷 COVID-19 Case Prediction</h3>", unsafe_allow_html=True)
+    mod.markdown("""
     ### Enter the required features to predict the total imputed COVID-19 cases.
     Please provide the values for the following features:
     """)
 
-    # Input fields for each feature
     input_data = {}
-    columns = st.columns(2)
+    columns = mod.columns(2)
     feature_list = [
         'fullyVaccinated', 'new_deaths_smoothed', 'new_people_vaccinated_smoothed', 
         'new_vaccinations_smoothed', 'partiallyVaccinated', 'stringency_index', 
@@ -74,26 +73,26 @@ def main():
 
     preprocessed_data = preprocess(input_df, differencing_data)
 
-    # Load the model
-    model_path = 'model/xgb_model_total_imputed_cases.pkl'
-
     if not os.path.exists(model_path):
-        st.error(f" Model file not found at {model_path}. Please check the path and try again.")
+        mod.error(f" Model file not found at {model_path}. Please check the path and try again.")
         return
     
     try:
         model = joblib.load(model_path)
     except Exception as e:
-        st.error(f"An error occured while loading the model: {e}")
+        mod.error(f"An error occured while loading the model: {e}")
         return
 
     # Make prediction
-    if st.button("Predict"):
+    with mod.columns(4)[-1]:
+        predict_button = st.button("Predict", use_container_width=True)
+    
+    if predict_button:
         try:
             prediction = model.predict(preprocessed_data)
-            st.success(f"Predicted Total Imputed Cases: {prediction[0]}")
+            mod.success(f"Predicted Total Imputed Cases: {prediction[0]}")
         except Exception as e:
-            st.error(f"An error occurred: {e}")
+            mod.error(f"An error occurred: {e}")
 
 if __name__ == "__main__":
-    main()
+    main(st)
