@@ -6,7 +6,20 @@ import os
 
 # Define preprocessing function
 def preprocess_differencing(main_dataframe, dataframe_with_last_known_value):
+    """
+    Preprocess the main dataframe by subtracting values from the dataframe_with_last_known_value.
 
+    Parameters:
+    main_dataframe (pd.DataFrame): The main dataframe containing 14 features. 
+                                   This dataframe is expected to have one row of user input.
+    dataframe_with_last_known_value (pd.DataFrame): The dataframe containing 6 features and their known values.
+                                                    This dataframe is expected to have one row with known values.
+
+    Returns:
+    pd.DataFrame: A new dataframe with the same structure as the main_dataframe, 
+                  where the values of the 6 matching features have been subtracted 
+                  by their corresponding values in the dataframe_with_last_known_value.
+    """
     # Identify the common columns
     common_columns = main_dataframe.columns.intersection(dataframe_with_last_known_value.columns)
 
@@ -17,8 +30,26 @@ def preprocess_differencing(main_dataframe, dataframe_with_last_known_value):
     return main_dataframe
 
 def preprocess_log(user_input, last_value):
+    '''
+    Preprocess a feature by taking a logarithm from the user's input and the last known value and then subtracting
+    the last known value from the user's input.
+
+    Parameters:
+    user_input (pd.Series): The series containing one value which is user's input.
+                            The series expects to have only one value.
+    last_value (pd.Series): The series containing one value which is the last known value.
+                            The series expects to have only one value.
+
+    Returns:
+    pd.Series: A new series with one preprocessed value.
+    '''
+    
+    # Take logarithm
     user_input, last_value = np.log(user_input), np.log(last_value)
+
+    # Apply differencing
     transformed_value = user_input - last_value
+
     return transformed_value
     
 # Main function to display the Streamlit app
@@ -42,7 +73,20 @@ def main():
     
     for i, feature in enumerate(feature_list):
         with columns[i % 2]:
-            input_data[feature] = st.number_input(f"Enter {feature}", value=0)
+            if feature == "fullyVaccinated":
+                input_data[feature] = st.number_input(f"Enter {feature}", min_value=9327654, step=1)
+            elif feature == "partiallyVaccinated":
+                input_data[feature] = st.number_input(f"Enter {feature}", min_value=4663827, step=1)
+            elif feature == "totalVaccinations":
+                input_data[feature] = st.number_input(f"Enter {feature}", min_value=9982068, step=1)
+            elif feature in ["stringency_index", "positive_rate", "rfh", "r3h"]:
+                input_data[feature] = st.number_input(f"Enter {feature}", min_value=0, step=0.001)
+            elif feature == "day_of_week":
+                input_data[feature] = st.number_input(f"Enter day of week (0 to 6)", min_value=0, max_value=6, step=1)
+            elif feature == "month":
+                input_data[feature] = st.number_input(f"Enter the month (1 to 12)", min_value=1, max_value=12, step=1)
+            else:
+                input_data[feature] = st.number_input(f"Enter {feature}", min_value=0, step=1)
 
     # Convert input data to DataFrame
     input_df = pd.DataFrame([input_data])
