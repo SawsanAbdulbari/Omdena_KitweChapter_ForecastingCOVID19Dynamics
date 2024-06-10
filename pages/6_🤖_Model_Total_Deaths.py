@@ -43,7 +43,7 @@ def preprocess_log(user_input, last_value):
     Returns:
     pd.Series: A new series with one preprocessed value.
     '''
-    
+
     # Take logarithm
     user_input, last_value = np.log(user_input), np.log(last_value)
 
@@ -80,7 +80,7 @@ def main():
             elif feature == "totalVaccinations":
                 input_data[feature] = st.number_input(f"Enter {feature}", min_value=9982068, step=1)
             elif feature in ["stringency_index", "positive_rate", "rfh", "r3h"]:
-                input_data[feature] = st.number_input(f"Enter {feature}", min_value=0, step=0.001)
+                input_data[feature] = st.number_input(f"Enter {feature}", min_value=0.0, step=0.001)
             elif feature == "day_of_week":
                 input_data[feature] = st.number_input(f"Enter day of week (0 to 6)", min_value=0, max_value=6, step=1)
             elif feature == "month":
