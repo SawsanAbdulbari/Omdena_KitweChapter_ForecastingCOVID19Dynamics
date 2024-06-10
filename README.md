@@ -37,19 +37,17 @@ Check the requirements.txt file for more information.
 
 **Instructions:**
 
-1. Upload an image containing a seagrass scene.
-2. Click the "Predict" button.
-3. The predicted seagrass mask will be displayed alongside the original image.
 
-## **Contributing:**
 
+## Contribution Guidelines:
 We welcome contributions to this project. Please submit pull requests with proper documentation and testing.
+For contributing to this project, please see [Contributing Guidelines](CONTRIBUTING.md) for more details.
 
-## **License:**
+## License:
 
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-## **Contact:**
+## Contact:
 
 For any questions or feedback, please contact <contact>
 
