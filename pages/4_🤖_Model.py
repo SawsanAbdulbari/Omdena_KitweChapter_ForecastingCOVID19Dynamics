@@ -1,21 +1,42 @@
 import pandas as pd
-import numpy as np
-import pickle
+# import numpy as np
+# import pickle
 import streamlit as st
-import xgboost as xgb
+# import xgboost as xgb
+import joblib
+import os
 
 # Load the model
-@st.cache_resource
-def load_model(path):
-    with open(path, 'rb') as file:
-        model = pickle.load(file)
-    return model
+# @st.cache_resource
+# def load_model(path):
+#     with open(path, 'rb') as file:
+#         model = pickle.load(file)
+#     return model
 
 # Define preprocessing function
-def preprocess(data, differenced_features):
-    for feature in differenced_features:
-        data[feature] = data[feature].diff().fillna(0)
-    return data
+def preprocess(main_dataframe, dataframe_with_last_known_value):
+    """
+    Preprocess the main dataframe by subtracting values from the dataframe_with_last_known_value.
+
+    Parameters:
+    main_dataframe (pd.DataFrame): The main dataframe containing 14 features. 
+                                   This dataframe is expected to have one row of user input.
+    dataframe_with_last_known_value (pd.DataFrame): The dataframe containing 6 features and their known values.
+                                                    This dataframe is expected to have one row with known values.
+
+    Returns:
+    pd.DataFrame: A new dataframe with the same structure as the main_dataframe, 
+                  where the values of the 6 matching features have been subtracted 
+                  by their corresponding values in the dataframe_with_last_known_value.
+    """
+    # Identify the common columns
+    common_columns = main_dataframe.columns.intersection(dataframe_with_last_known_value.columns)
+
+    # Subtract the values of the known features
+    for column in common_columns:
+        main_dataframe[column] = main_dataframe[column] - dataframe_with_last_known_value[column]
+        
+    return main_dataframe
 
 # Main function to display the Streamlit app
 def main():
@@ -44,15 +65,27 @@ def main():
     input_df = pd.DataFrame([input_data])
 
     # Preprocess the input data
-    differenced_features = [
-        'fullyVaccinated', 'new_people_vaccinated_smoothed',
-        'partiallyVaccinated', 'stringency_index', 'totalTests', 'totalVaccinations'
-    ]
-    preprocessed_data = preprocess(input_df, differenced_features)
+    differenced_features = {
+        'fullyVaccinated': 9327654, 'new_people_vaccinated_smoothed': 959,
+        'partiallyVaccinated': 4663827, 'stringency_index': 19.89, 'totalTests': 4166833, 'totalVaccinations': 9982068
+    }
+
+    differencing_data = pd.DataFrame([differenced_features])
+
+    preprocessed_data = preprocess(input_df, differencing_data)
 
     # Load the model
-    model_path = '../model/xgb_model_total_imputed_cases.pkl'
-    model = load_model(model_path)
+    model_path = 'model/xgb_model_total_imputed_cases.pkl'
+
+    if not os.path.exists(model_path):
+        st.error(f" Model file not found at {model_path}. Please check the path and try again.")
+        return
+    
+    try:
+        model = joblib.load(model_path)
+    except Exception as e:
+        st.error(f"An error occured while loading the model: {e}")
+        return
 
     # Make prediction
     if st.button("Predict"):
