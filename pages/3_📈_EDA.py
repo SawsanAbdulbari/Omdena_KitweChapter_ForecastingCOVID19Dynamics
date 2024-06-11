@@ -63,6 +63,7 @@ def main():
     elif page == 'Deaths Analysis':
         st.subheader('COVID-19 Deaths Analysis')
         plot_deaths_analysis(df)
+        plot_total_recovery_analysis(df)
 
     elif page == 'Vaccinations Analysis':
         st.subheader('COVID-19 Vaccinations Analysis')
@@ -76,7 +77,7 @@ def plot_cases_analysis(df):
         x='Unnamed: 0',
         y='imputed_total_cases',
         title='Total Cases Over Time',
-        labels={'Unnamed: 0': 'Date', 'imputed_total_cases': 'Total Cases'},
+        labels={'Unnamed: 0': '', 'imputed_total_cases': 'Total Cases'},
         height=600
     )
     fig.update_xaxes(tickangle=45, tickfont=dict(size=14))
@@ -92,13 +93,29 @@ def plot_deaths_analysis(df):
         x='Unnamed: 0',
         y='imputed_total_deaths',
         title='Total Deaths Over Time',
-        labels={'Unnamed: 0': 'Date', 'imputed_total_deaths': 'Total Deaths'},
+        labels={'Unnamed: 0': '', 'imputed_total_deaths': 'Total Deaths'},
         height=600
     )
     fig.update_xaxes(tickangle=45, tickfont=dict(size=14))
     fig.update_yaxes(title_text='Total Deaths', title_font=dict(size=16))
     fig.update_layout(title_font=dict(size=24))
     st.plotly_chart(fig, use_container_width=True)
+
+#Create a function to plot recovery rate over time 
+def plot_total_recovery_analysis(df):
+    plot_df_recovery = df.groupby(['Unnamed: 0'])['imputed_total_recoveries'].sum().reset_index()
+    fig = px.scatter(
+        plot_df_recovery,
+        x='Unnamed: 0',
+        y='imputed_total_recoveries',
+        title='Total recovery over Time',
+        labels={'Unnamed: 0': '', 'imputed_total_recoveries': 'Recovery Rate'},
+        height=600
+    )
+    fig.update_xaxes(tickangle=45, tickfont=dict(size=14))
+    fig.update_yaxes(title_text='Recovery Rate', title_font=dict(size=16))
+    fig.update_layout(title_font=dict(size=24))
+    st.plotly_chart(fig, use_container_width=True)    
 
 # Create a function to plot vaccinations analysis
 def plot_vaccinations_analysis(df):
@@ -108,7 +125,7 @@ def plot_vaccinations_analysis(df):
         x='Unnamed: 0',
         y='totalVaccinations',
         title='Total Vaccinations Over Time',
-        labels={'Unnamed: 0': 'Date', 'totalVaccinations': 'Total Vaccinations'},
+        labels={'Unnamed: 0': '', 'totalVaccinations': 'Total Vaccinations'},
         height=600
     )
     fig.update_xaxes(tickangle=45, tickfont=dict(size=14))
@@ -129,6 +146,7 @@ def main():
     elif page == 'Deaths Analysis':
         st.subheader('COVID-19 Deaths Analysis')
         plot_deaths_analysis(df)
+        plot_total_recovery_analysis(df)
 
     elif page == 'Vaccinations Analysis':
         st.subheader('COVID-19 Vaccinations Analysis')
@@ -142,7 +160,7 @@ def plot_cases_analysis(df):
         x='Unnamed: 0',
         y='imputed_total_cases',
         title='Total Cases Over Time',
-        labels={'Unnamed: 0': 'Date', 'imputed_total_cases': 'Total Cases'},
+        labels={'Unnamed: 0': '', 'imputed_total_cases': 'Total Cases'},
         height=600
     )
     fig.update_xaxes(tickangle=45, tickfont=dict(size=14))
@@ -158,7 +176,7 @@ def plot_deaths_analysis(df):
         x='Unnamed: 0',
         y='imputed_total_deaths',
         title='Total Deaths Over Time',
-        labels={'Unnamed: 0': 'Date', 'imputed_total_deaths': 'Total Deaths'},
+        labels={'Unnamed: 0': '', 'imputed_total_deaths': 'Total Deaths'},
         height=600
     )
     fig.update_xaxes(tickangle=45, tickfont=dict(size=14))
@@ -174,7 +192,7 @@ def plot_vaccinations_analysis(df):
         x='Unnamed: 0',
         y='totalVaccinations',
         title='Total Vaccinations Over Time',
-        labels={'Unnamed: 0': 'Date', 'totalVaccinations': 'Total Vaccinations'},
+        labels={'Unnamed: 0': '', 'totalVaccinations': 'Total Vaccinations'},
         height=600
     )
     fig.update_xaxes(tickangle=45, tickfont=dict(size=14))
@@ -192,6 +210,12 @@ def cases_by_stringency_index(df):
                 width=800, height=800, color='stringency_index')
     st.plotly_chart(fig)
 
+def totsl_deaths_by_stringency_index(df):
+    fig = px.box(df, x='stringency_index', y='imputed_total_deaths',
+                title='Total deaths by Stringency Index',
+                width=800, height=800, color='stringency_index')
+    st.plotly_chart(fig)     
+
 def deaths_by_reproduction_rate(df):
     fig = px.box(df, x='reproduction_rate', y='imputed_total_deaths',
                 title='Deaths by Reproduction Rate',
@@ -199,7 +223,7 @@ def deaths_by_reproduction_rate(df):
     st.plotly_chart(fig)
 
 # Sidebar selector for user to choose a plot
-plot_choice = st.sidebar.selectbox("Select a Plot", ["Cases by Stringency Index", "Deaths by Reproduction Rate"])
+plot_choice = st.sidebar.selectbox("Select a Plot", ["Cases by Stringency Index","Total Deaths Distribution by Stringency index", "Deaths by Reproduction Rate"])
 
 # Instructions
 st.sidebar.markdown("Explore the distribution of cases and deaths by selecting a plot.")
@@ -208,6 +232,11 @@ st.sidebar.markdown("Explore the distribution of cases and deaths by selecting a
 if plot_choice == "Cases by Stringency Index":
     st.subheader("Cases Distribution by Stringency Index")
     cases_by_stringency_index(df)
-else:
+
+elif plot_choice == "Deaths Distribution by Reproduction Rate":
     st.subheader("Deaths Distribution by Reproduction Rate")
     deaths_by_reproduction_rate(df)
+
+else:
+    st.subheader("Total Deaths Distribution by Stringency index")
+    totsl_deaths_by_stringency_index(df) 
