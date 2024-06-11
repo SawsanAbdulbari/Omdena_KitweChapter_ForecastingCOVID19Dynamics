@@ -77,28 +77,85 @@ def main():
         "day_of_week",
     ]
 
-    info = [
-        "Number of individuals who have completed the full vaccination regimen for COVID-19.",
-        "New deaths attributed to COVID-19 (7-day smoothed). Counts can include probable deaths, where reported.",
-        "Daily number of people receiving their first vaccine dose (7-day smoothed)",
-        "New COVID-19 vaccination doses administered (7-day smoothed).",
-        "Number of individuals who have received at least one dose of a COVID-19 vaccine but have not yet completed the full vaccination regimen.",
-        "Government Response composite measure based on 9 response indicators including school/workplace closures, and travel bans, value from 0 to 100 (100 = strictest)",
-        "Number of COVID-19 tests conducted within a 24-hour period.",
-        "Total tests for COVID-19",
-        "Total number of COVID-19 vaccine doses administered.",
-        "Number of COVID-19 vaccine doses administered within a 24-hour period.",
-        "rfh",
-        "r3h",
-        "Month",
-        "Day of week",
-    ]
+    st.divider()
 
-    for i, feature in enumerate(feature_list):
-        with columns[i % 2]:
-            st.divider()
-            st.caption(info[i])
-            input_data[feature] = st.number_input(f"Enter {feature}", value=0)
+    col1, col2 = st.columns(2)
+    with col1:
+        fullyVaccinated = st.number_input(
+            "**fullyVaccinated**",
+            min_value=0.0,
+            help="Number of individuals who have completed the full vaccination regimen for COVID-19",
+        )
+        new_deaths_smoothed = st.number_input(
+            "**new_deaths_smoothed**",
+            min_value=0.0,
+            help="New deaths attributed to COVID-19 (7-day smoothed). Counts can include probable deaths, where reported.",
+        )
+        new_people_vaccinated_smoothed = st.number_input(
+            "**new_people_vaccinated_smoothed**",
+            min_value=0.0,
+            help="Daily number of people receiving their first vaccine dose(7-day smoothed)",
+        )
+        new_vaccinations_smoothed = st.number_input(
+            "**new_vaccinations_smoothed**",
+            min_value=0.0,
+            help="New COVID-19 vaccination doses administered (7-day smoothed)",
+        )
+        partiallyVaccinated = st.number_input(
+            "**partiallyVaccinated**",
+            min_value=0.0,
+            help="Number of individuals who have received at least one dose of a COVID-19 vaccine but have not yet completed the full vaccination regimen.",
+        )
+        stringency_index = st.number_input(
+            "**stringency_index**",
+            min_value=0.0,
+            max_value=100.0,
+            help="Government response composite measure based on 9 response indicators including school/workplace closures,and travel bans, value from min 0 to max 100(100=strictest)",
+        )
+        test24hours = st.number_input(
+            "**test24hours**",
+            min_value=0.0,
+            help="Number of tests conducted in the last 24 hours",
+        )
+    with col2:
+        totalTests = st.number_input(
+            "**totalTests**", min_value=0.0, help="Total number of tests for COVID-19"
+        )
+        totalVaccinations = st.number_input(
+            "**totalVaccinations**",
+            min_value=0.0,
+            help="Total number of COVID-19 vaccination doses administered",
+        )
+        vaccinated24hours = st.number_input(
+            "**vaccinated24hours**",
+            min_value=0.0,
+            help="Number of people vaccinated within a 24-hour period",
+        )
+        rfh = st.number_input("**rfh**", min_value=0.0, help="10 day rainfall in mm")
+        r3h = st.number_input(
+            "**r3h**",
+            min_value=0.0,
+            help="Rainfall 1-month rolling aggregation long term average in mm",
+        )
+        month = st.number_input(
+            "**month**", min_value=1, max_value=12, help="Month in the year. Max 12"
+        )
+        if month in [1, 3, 5, 7, 8, 10, 12]:
+            day_of_week = st.number_input(
+                "**day_of_week**",
+                min_value=1,
+                max_value=31,
+                help="Day in the month. Max 31",
+            )
+        else:
+            day_of_week = st.number_input(
+                "**day_of_week**",
+                min_value=1,
+                max_value=30,
+                help="Day in the month. Max 30",
+            )
+
+    st.divider()
 
     # Convert input data to DataFrame
     input_df = pd.DataFrame([input_data])
