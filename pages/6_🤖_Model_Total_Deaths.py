@@ -75,7 +75,7 @@ def load_model():
     
 # Main function to display the Streamlit app
 def main():
-    st.title("COVID-19 Case Prediction :mask:")
+    st.title("COVID-19 Total Death Prediction :mask:")
 
     st.markdown("""
     ### Enter the required features to predict the total deaths from COVID-19.
@@ -166,4 +166,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
 

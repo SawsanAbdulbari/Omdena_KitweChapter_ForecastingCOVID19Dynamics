@@ -25,7 +25,8 @@ def preprocess(main_dataframe, dataframe_with_last_known_value):
     # Subtract the values of the known features
     for column in common_columns:
         main_dataframe[column] = main_dataframe[column] - dataframe_with_last_known_value[column]
-        
+        if main_dataframe[column].iloc[0] < 0:
+            main_dataframe[column] = 0
     return main_dataframe
 
 @st.cache_resource
@@ -126,3 +127,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
