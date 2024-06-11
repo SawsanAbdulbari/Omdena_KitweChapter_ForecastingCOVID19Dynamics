@@ -26,6 +26,8 @@ def preprocess_differencing(main_dataframe, dataframe_with_last_known_value):
     # Subtract the values of the known features
     for column in common_columns:
         main_dataframe[column] = main_dataframe[column] - dataframe_with_last_known_value[column]
+        if main_dataframe[column].iloc[0] < 0:
+            main_dataframe[column] = 0
         
     return main_dataframe
 
@@ -50,6 +52,8 @@ def preprocess_log(user_input, last_value):
 
     # Apply differencing
     transformed_value = log_user_input - log_last_value
+    if transformed_value.iloc[0] < 0:
+        transformed_value = 0
 
     return transformed_value
 
@@ -94,12 +98,12 @@ def main():
     with col1:
         
         imputed_active_cases = st.number_input("**imputed_active_cases**", min_value=0.0, help="Estimate of the number of active COVID-19 cases at a given time")
-        fullyVaccinated = st.number_input("**fullyVaccinated**", min_value=9327654, step=1, help="Number of individuals who have completed the full vaccination regimen for COVID-19")
+        fullyVaccinated = st.number_input("**fullyVaccinated**", min_value=9327654, value=9327654, step=1, help="Number of individuals who have completed the full vaccination regimen for COVID-19")
         new_vaccinations_smoothed = st.number_input("**new_vaccinations_smoothed**", min_value=0.0, help="New COVID-19 vaccination doses administered (7-day smoothed)")
-        partiallyVaccinated = st.number_input("**partiallyVaccinated**", min_value=4663827, step=1, help="Number of individuals who have received at least one dose of a COVID-19 vaccine but have not yet completed the full vaccination regimen.")
+        partiallyVaccinated = st.number_input("**partiallyVaccinated**", min_value=4663827, value=4663827, step=1, help="Number of individuals who have received at least one dose of a COVID-19 vaccine but have not yet completed the full vaccination regimen.")
         stringency_index = st.number_input("**stringency_index**", min_value=0.0, step=0.001, max_value=100.0, help="Government response composite measure based on 9 response indicators including school/workplace closures,and travel bans, value from 0 to 100(100=strictest)")
         test24hours = st.number_input("**test24hours**", min_value=0, help="Number of tests conducted in the last 24 hours")
-        totalVaccinations = st.number_input("**totalVaccinations**", min_value=9982068, step=1, help="Total number of COVID-19 vaccination doses administered")
+        totalVaccinations = st.number_input("**totalVaccinations**", min_value=9982068, value=9982068, step=1, help="Total number of COVID-19 vaccination doses administered")
 
     with col2:  
         
@@ -162,3 +166,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
