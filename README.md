@@ -33,7 +33,7 @@
 
 This project aims to predict the total imputed cases of COVID-19 using machine learning techniques. The project involves data preprocessing, feature engineering, model building, and evaluation. The primary model used in this project is XGBoost.
 
-![COVID-19](img.jpg)
+![COVID-19](./media/img.jpg)
 
 
 ## Directory Structure
