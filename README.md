@@ -58,11 +58,13 @@ This project aims to predict the total imputed cases of COVID-19 using machine l
 │   ├── 3_📈_EDA.py
 │   └── 4_🤖_Model.py
 ├── predictions_page
+|   |__ __init__.py
 │   ├── model_total_case_prediction.py
 │   └── model_total_death_prediction.py
 ├── README.md
 ├── requirements.txt
 └── utils
+    |__ __init__.py
     ├── model_loader.py
     └── preprocessing.py
 
