@@ -47,7 +47,7 @@ This project aims to predict the total imputed cases of COVID-19 using machine l
 | |__ omdena_logo.jpg
 | |__ omdena.png
 │ └── logo.jpg
-├── 1_🏠_Home.py
+├── 1_🏠_Main.py
 ├── frontend
 │   └── streamlit.css
 ├── model
