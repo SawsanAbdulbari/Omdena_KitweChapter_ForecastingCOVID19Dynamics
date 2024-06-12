@@ -41,17 +41,31 @@ This project aims to predict the total imputed cases of COVID-19 using machine l
 .
 ├── data
 │ └── preprocessed_data_updated.csv
-├── models
-│ └─xgb_model_total_imputed_cases.pkl
-├── app
-│ ├── 1_🏠_Home.py
-│ ├── 2_📊_Overview.py
-│ ├── 3_📈_EDA.py
-│ ├── 4_📈_Model.py
 ├── media
+| |__ omdena_zambia_highres.png
+| |__ img.jpg
+| |__ omdena_logo.jpg
+| |__ omdena.png
 │ └── logo.jpg
+├── 1_🏠_Home.py
+├── frontend
+│   └── streamlit.css
+├── model
+│   ├── xgb_model_total_deaths.pkl
+│   └── xgb_model_total_imputed_cases.pkl
+├── pages
+│   ├── 2_📊_Overview.py
+│   ├── 3_📈_EDA.py
+│   └── 4_🤖_Model.py
+├── predictions_page
+│   ├── model_total_case_prediction.py
+│   └── model_total_death_prediction.py
+├── README.md
 ├── requirements.txt
-└── README.md
+└── utils
+    ├── model_loader.py
+    └── preprocessing.py
+
 
 ```
 
@@ -91,7 +105,7 @@ Ensure that your data file (preprocessed_data_updated.csv) is located in the dat
 To start the Streamlit application, run:
 
 ```sh
-streamlit run app/1_🏠_Main.py
+streamlit run 1_🏠_Home.py
 ```
 
 

@@ -5,12 +5,14 @@ import streamlit_extras
 from streamlit_extras.app_logo import add_logo
 st.title("Welcome to the COVID-19 Case Prediction :green[App!] :health_worker::test_tube:\n\n")
 # Insert the image at the top of the page
-st.image("img.jpg", use_column_width=True)
+st.image("./media/img.jpg", use_column_width=True)
 
 # Add a sidebar with a logo
 # st.sidebar.image("logo.jpg", use_column_width='bool') 
 # add_logo("omdena_zambia_highres.png", height=10)
-st.sidebar.image("omdena_zambia_highres.png", use_column_width='always') 
+# Sidebar for additional information
+st.sidebar.title('COVID-19 Dashboard')
+st.sidebar.image("./media/omdena_zambia_highres.png", use_column_width='always') 
 st.sidebar.write("The COVID-19 Case Prediction📊📈")
 st.sidebar.write("")
 # <p>Developed with <span style='color:blue;'>❤</span> by <a href="" target="_blank"></a> </p>
@@ -50,7 +52,7 @@ As the pandemic unfolded, Zambia, like other nations, faced a multitude of chall
 ### Contact Us
 For more information, please reach out to our team at [info@covidpredictapp.com](mailto:info@covidpredictapp.com) :email:
 """)
-st.image("omdena_logo.jpg", use_column_width=False)
+st.image("./media/omdena_logo.jpg", use_column_width=False)
 # Footer
 st.markdown("""
 <style>

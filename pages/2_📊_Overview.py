@@ -20,7 +20,7 @@ st.title(":bar_chart: Overview Of COVID-19 Data")
 st.markdown('<style>div.block-container{padding-top:3rem;color:white}</style>', unsafe_allow_html=True)
 
 # Assuming your dataset is named 'covid_data.csv'
-df = pd.read_csv("preprocessed_data_updated.csv")
+df = pd.read_csv("./data/preprocessed_data_updated.csv")
 
 # Calculate summary metrics
 total_cases = df['imputed_total_cases'].max()
@@ -69,16 +69,14 @@ display_kpi_metrics(formatted_values[2:6], titles[2:6], bg_colors[2:6])
 
 # Sidebar for additional information
 st.sidebar.title('COVID-19 Dashboard')
-
-# Add a logo to the sidebar
-logo_path = "logo.jpg"
-st.sidebar.image(logo_path, use_column_width=True)
-
+st.sidebar.image("./media/omdena_zambia_highres.png", use_column_width='always') 
 st.sidebar.write("This dashboard provides an overview of COVID-19 data, including cases, deaths, vaccinations, and testing trends.")
+st.sidebar.divider()
+
 
 # Filter options
 st.sidebar.header("Filter Options")
-# Date range filter
+
 # Date range filter
 date_range = st.sidebar.date_input(
     "Select Date Range", 

@@ -11,16 +11,14 @@ st.markdown('<style>div.block-container{padding-top:1rem;}</style>', unsafe_allo
 st.title(":chart_with_upwards_trend: Exploratory Data Analysis")
 
 # Load the dataset
-file_path = 'preprocessed_data_updated.csv'
+file_path = './data/preprocessed_data_updated.csv'
 df = pd.read_csv(file_path)
 
 # Sidebar for additional information
 st.sidebar.title('COVID-19 Dashboard')
-
-logo_path = "logo.jpg"
-st.sidebar.image(logo_path, use_column_width=True)
-
+st.sidebar.image("./media/omdena_zambia_highres.png", use_column_width='always') 
 st.sidebar.write("This dashboard provides an overview of COVID-19 data, including cases, deaths, vaccinations, and testing trends.")
+st.sidebar.divider()
 
 
 # Set page title and description

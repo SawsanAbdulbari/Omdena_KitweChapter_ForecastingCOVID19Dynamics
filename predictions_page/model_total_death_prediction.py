@@ -1,80 +1,10 @@
 import pandas as pd
 import streamlit as st
 import numpy as np
-import joblib
-import os
+from utils.preprocessing import preprocess_differencing, preprocess_log
+from utils.model_loader import load_model_total_death
 
-# Define preprocessing function
-def preprocess_differencing(main_dataframe, dataframe_with_last_known_value):
-    """
-    Preprocess the main dataframe by subtracting values from the dataframe_with_last_known_value.
-
-    Parameters:
-    main_dataframe (pd.DataFrame): The main dataframe containing 14 features. 
-                                   This dataframe is expected to have one row of user input.
-    dataframe_with_last_known_value (pd.DataFrame): The dataframe containing 6 features and their known values.
-                                                    This dataframe is expected to have one row with known values.
-
-    Returns:
-    pd.DataFrame: A new dataframe with the same structure as the main_dataframe, 
-                  where the values of the 6 matching features have been subtracted 
-                  by their corresponding values in the dataframe_with_last_known_value.
-    """
-    # Identify the common columns
-    common_columns = main_dataframe.columns.intersection(dataframe_with_last_known_value.columns)
-
-    # Subtract the values of the known features
-    for column in common_columns:
-        main_dataframe[column] = main_dataframe[column] - dataframe_with_last_known_value[column]
-        if main_dataframe[column].iloc[0] < 0:
-            main_dataframe[column] = 0
-        
-    return main_dataframe
-
-def preprocess_log(user_input, last_value):
-    '''
-    Preprocess a feature by taking a logarithm from the user's input and the last known value and then subtracting
-    the last known value from the user's input.
-
-    Parameters:
-    user_input (pd.Series): The series containing one value which is user's input.
-                            The series expects to have only one value.
-    last_value (pd.Series): The series containing one value which is the last known value.
-                            The series expects to have only one value.
-
-    Returns:
-    pd.Series: A new series with one preprocessed value.
-    '''
-
-    # Use np.log1p for safer logarithm calculation
-    log_user_input = np.log1p(user_input)
-    log_last_value = np.log1p(last_value)
-
-    # Apply differencing
-    transformed_value = log_user_input - log_last_value
-    if transformed_value.iloc[0] < 0:
-        transformed_value = 0
-
-    return transformed_value
-
-@st.cache_resource
-def load_model():
-# Load the model
-    model_path = 'model/xgb_model_total_deaths.pkl'
-
-    if not os.path.exists(model_path):
-        st.error(f" Model file not found at {model_path}. Please check the path and try again.")
-        return
-    
-    try:
-        model = joblib.load(model_path)
-    except Exception as e:
-        st.error(f"An error occured while loading the model: {e}")
-        return
-    return model
-    
-# Main function to display the Streamlit app
-def main():
+def total_death_prediction_page():
     st.title("COVID-19 Total Death Prediction :mask:")
 
     st.markdown("""
@@ -85,16 +15,8 @@ def main():
 
     st.divider()
 
-    # Input fields for each feature
-    
     col1, col2 = st.columns(2)
-    feature_list = [
-        'imputed_active_cases', 'fullyVaccinated', 'new_vaccinations_smoothed', 
-        'partiallyVaccinated', 'stringency_index', 'test24hours', 'totalVaccinations', 
-        'total_tests_per_thousand', 'vaccinated24hours', 'positive_rate', 'rfh', 'r3h', 
-        'day_of_week', 'month'
-    ]
-    
+
     with col1:
         
         imputed_active_cases = st.number_input("**imputed_active_cases**", min_value=0.0, help="Estimate of the number of active COVID-19 cases at a given time")
@@ -133,12 +55,11 @@ def main():
             'day_of_week': [day_of_week],
             'month':[month],
             })
-    
+
     st.markdown("**Note:** The non-stationary features are differenced to make the data stationary.")
 
-    # Preprocess the input data
     differenced_features = {
-        'fullyVaccinated': 9327654, 'partiallyVaccinated': 4663827, 'stringency_index': 13.89, 
+        'fullyVaccinated': 9327654, 'partiallyVaccinated': 4663827, 'stringency_index': 13.89,
         'totalVaccinations': 9982068
     }
 
@@ -153,19 +74,13 @@ def main():
     for feature in log_feature.keys():
         preprocessed_data[feature] = preprocess_log(preprocessed_data[feature], log_series[feature])
 
-    # Make prediction
     if st.button("Predict"):
         try:
-            model = load_model()
+            model = load_model_total_death()
             st.write("**You have submitted the below data.**")
             st.write(input_df)
+            # prediction = predict_total_deaths(preprocessed_data)
             prediction = model.predict(preprocessed_data)
-            st.success(f"Predicted Total Deaths: {prediction[0]: .3f}") #Display the results upto three decimal places
+            st.success(f"Predicted Total Deaths: {prediction[0]: .3f}")
         except Exception as e:
             st.error(f"An error occurred: {e}")
-
-if __name__ == "__main__":
-    main()
-
-
-
