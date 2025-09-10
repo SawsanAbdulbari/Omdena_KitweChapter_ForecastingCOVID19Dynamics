@@ -5,7 +5,7 @@ from predictions_page.model_total_case_prediction import total_case_prediction_p
 def main():
     # Sidebar for additional information
     st.sidebar.title('COVID-19 Dashboard')
-    st.sidebar.image("./media/omdena_zambia_highres.png", use_column_width='always') 
+    st.sidebar.image("./media/omdena_zambia_highres.png", use_container_width='always') 
     st.sidebar.write("This dashboard provides two prediction model options to predict total death and total cases.")
     st.sidebar.divider()
 
