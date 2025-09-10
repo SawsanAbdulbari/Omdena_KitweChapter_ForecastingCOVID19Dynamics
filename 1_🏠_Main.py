@@ -5,7 +5,7 @@ import streamlit_extras
 from streamlit_extras.app_logo import add_logo
 st.title("Welcome to the COVID-19 Case Prediction :green[App!] :health_worker::test_tube:\n\n")
 # Insert the image at the top of the page
-st.image("./media/img.jpg", use_column_width=True)
+st.image("./media/img.jpg", use_container_width=True)
 
 # Add a sidebar with a logo
 # st.sidebar.image("logo.jpg", use_column_width='bool') 
@@ -70,3 +70,4 @@ st.markdown("""
 <p>Developed with <span style='color:blue;'>❤</span> by <a href="https://www.linkedin.com/company/omdena-kitwe-zambia-chapter/" target="_blank">Omdena Kitwe, Zambia Chapter Team</a> </p>
 </div>
 """, unsafe_allow_html=True)
+
