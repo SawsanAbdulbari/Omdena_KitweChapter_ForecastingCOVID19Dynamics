@@ -16,7 +16,7 @@ df = pd.read_csv(file_path)
 
 # Sidebar for additional information
 st.sidebar.title('COVID-19 Dashboard')
-st.sidebar.image("./media/omdena_zambia_highres.png", use_column_width='always') 
+st.sidebar.image("./media/omdena_zambia_highres.png", use_container_width='always') 
 st.sidebar.write("This dashboard provides an overview of COVID-19 data, including cases, deaths, vaccinations, and testing trends.")
 st.sidebar.divider()
 
